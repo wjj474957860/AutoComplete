@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>AutoComplete</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+	</head>
+<body>
+	<div>
+		<input type="text" id="search" size="20" placeholder="Search">
+	</div>
+    <script src="js/jquery.js"></script>
+    <script>
+        $(function() {
+            $.ajax({
+                url: "search.xml",
+                dataType: "xml",
+                success: function( xmlResponse ) {
+                    var data = $( "article", xmlResponse ).map(function() {
+                        return {
+                            value: $( "title", this ).text() + ", " +
+                                    ( $.trim( $( "date", this ).text() ) ),
+                            desc: $("description", this).text(),
+                            url: $("url", this).text()
+                        };
+                    }).get();
+                    alert(data);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
