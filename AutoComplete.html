@@ -4,7 +4,7 @@
 		<title>AutoComplete</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
 	</head>
 <body>
 	<div class="search-bar">
@@ -13,21 +13,29 @@
     <script src="js/jquery.js"></script>
     <script src="js/jquery-ui.js"></script>
     <script>
-        $(function() {
-            $.ajax({
-                url: "search.xml",
-                dataType: "xml",
-                success: function( xmlResponse ) {
-                    $(".search-bar").append("<ul id='resultList'></ul>");
-
-                    $(xmlResponse).find("article").each(function(){
-
-                        $("#resultList").append("<li><a href='"+$(this).find("url").text() +
-                                "'>"+$(this).find("title").text()+"</a></li>");
-                    });
-                }
+        $(document).ready(function(){
+            $("#search").on('input',function() {
+                var s = $(this).val();
+                var sLength = s.length;
+                console.log(s);
+                $.ajax({
+                    url: "search.xml",
+                    dataType: "xml",
+                    success: function( xmlResponse ) {
+                        $(".search-bar").append("<ul id='resultList'></ul>");
+                        $("#resultList").html("");
+                        $(xmlResponse).find("article").each(function(){
+                            var r = $(this).find("title").text();
+                            if(sLength != 0 && r.indexOf(s) >= 0){
+                                $("#resultList").append("<li><a href='"+$(this).find("url").text() +
+                                        "'>"+ r +"</a></li>");
+                            }
+                        });
+                    }
+                });
             });
         });
+
     </script>
 </body>
 </html>
